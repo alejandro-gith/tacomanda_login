@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../Tacomanda.Domain/Tacomanda.Domain.csproj" />
+    <ProjectReference Include="../Tacomanda.Application/Tacomanda.Application.csproj" />
+  </ItemGroup>
+</Project>

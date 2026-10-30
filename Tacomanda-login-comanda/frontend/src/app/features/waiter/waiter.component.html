@@ -1,0 +1,132 @@
+<div class="waiter-shell">
+  <header class="waiter-top">
+    <span class="waiter-brand">🌮 Tacos Angy</span>
+    <div>
+      <strong>{{ f.store.session()?.displayName }}</strong
+      ><small>Mesero</small>
+    </div>
+    <button class="cart-pill">
+      {{ f.count() }} productos ·
+      {{ f.total() | currency: "MXN" : "symbol-narrow" }}</button
+    ><button class="btn" (click)="f.auth.logout()">Cambiar turno</button>
+  </header>
+  <main class="waiter-page">
+    <section class="menu">
+      <div class="menu-head">
+        <div>
+          <h1>Nuestro menú</h1>
+          <p>Selecciona los productos de la comanda.</p>
+        </div>
+      </div>
+      <nav class="categories">
+        @for (cat of f.categories(); track cat) {
+          <button
+            [class.active]="f.category() === cat"
+            (click)="f.category.set(cat)"
+          >
+            {{ cat }}
+          </button>
+        }
+      </nav>
+      @if (f.error()) {
+        <p class="error">Error en el sistema.</p>
+      }
+      @if (f.success()) {
+        <p class="success">✓ {{ f.success() }}</p>
+      }
+      <div class="dish-grid">
+        @for (dish of f.visible(); track dish.id) {
+          <article class="dish-card" (click)="f.add(dish)">
+            <div class="dish-emoji">{{ dish.emoji }}</div>
+            <div class="dish-info">
+              <span class="cat">{{ dish.category }}</span>
+              <h2>{{ dish.name }}</h2>
+              <p>{{ dish.description }}</p>
+              <strong>{{
+                dish.price | currency: "MXN" : "symbol-narrow"
+              }}</strong>
+            </div>
+            @if (f.quantity(dish.id)) {
+              <span class="qty-badge">{{ f.quantity(dish.id) }}</span>
+            }
+            <button aria-label="Agregar">+</button>
+          </article>
+        } @empty {
+          <p class="empty">No hay platillos disponibles.</p>
+        }
+      </div>
+    </section>
+    <aside class="order">
+      <header>
+        <div>
+          <span>Comanda nueva</span>
+          <h2>Detalle del pedido</h2>
+        </div>
+        <b>{{ f.count() }}</b>
+      </header>
+      <div class="field">
+        <label>Mesa</label
+        ><select
+          [value]="f.selectedTable()"
+          (change)="f.selectTable($any($event.target).value)"
+        >
+          <option value="" disabled>Selecciona una mesa</option>
+          @for (table of f.tables(); track table.id) {
+            <option
+              [value]="table.id"
+              [disabled]="table.status !== 'Disponible'"
+            >
+              {{ table.name }} · {{ table.status }}
+            </option>
+          }
+        </select>
+      </div>
+      <div class="cart-items">
+        @for (item of f.cart(); track item.dish.id) {
+          <article class="cart-item">
+            <div>
+              <strong>{{ item.dish.name }}</strong
+              ><span
+                >{{
+                  item.dish.price | currency: "MXN" : "symbol-narrow"
+                }}
+                c/u</span
+              >
+            </div>
+            <div class="qty">
+              <button (click)="f.change(item.dish.id, -1)">−</button
+              ><b>{{ item.quantity }}</b
+              ><button (click)="f.change(item.dish.id, 1)">+</button>
+            </div>
+            <input
+              placeholder="Observaciones (opcional)"
+              maxlength="200"
+              [value]="item.note"
+              (input)="f.note(item.dish.id, $any($event.target).value)"
+            /><span class="subtotal">{{
+              item.quantity * item.dish.price
+                | currency: "MXN" : "symbol-narrow"
+            }}</span>
+          </article>
+        } @empty {
+          <p class="empty">Agrega productos desde el menú.</p>
+        }
+      </div>
+      <footer>
+        <div>
+          <span>Total</span
+          ><strong>{{ f.total() | currency: "MXN" : "symbol-narrow" }}</strong>
+        </div>
+        <button
+          class="send"
+          [disabled]="
+            f.sending() || !f.selectedTable() || f.cart().length === 0
+          "
+          (click)="f.send()"
+        >
+          {{ f.sending() ? "ENVIANDO…" : "ENVIAR A COCINA" }}</button
+        ><button class="clear" (click)="f.clear()">Limpiar comanda</button>
+      </footer>
+    </aside>
+  </main>
+</div>
