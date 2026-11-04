@@ -1,0 +1,31 @@
+<main class="login-screen">
+  <section class="login-card" aria-labelledby="title">
+    <div class="logo">
+      <span>🌮</span>
+      <h1 id="title">Tacos Angy</h1>
+      <p>Sistema de gestión</p>
+    </div>
+    <div class="divider"><i></i><b>acceso al puesto</b><i></i></div>
+    <form (ngSubmit)="facade.iniciarSesion()">
+      <div class="field">
+        <label for="usuario">Usuario</label>
+        <input id="usuario" name="usuario" [(ngModel)]="vm.usuario"
+          autocomplete="username" maxlength="80" required
+          [disabled]="vm.loading" placeholder="Nombre de usuario" />
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" name="password" [(ngModel)]="vm.password"
+          type="password" autocomplete="current-password" minlength="8"
+          maxlength="128" required [disabled]="vm.loading" placeholder="••••••••" />
+      </div>
+      @if (vm.mensaje) {
+        <p class="error" role="alert">{{ vm.mensaje }}</p>
+      }
+      <button type="submit" [disabled]="vm.loading || !vm.usuario || !vm.password">
+        {{ vm.loading ? "INGRESANDO…" : "ENTRAR AL PUESTO" }}
+      </button>
+    </form>
+    <small>Ingresa con tu cuenta para comenzar el turno.</small>
+  </section>
+</main>
