@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
+<<<<<<< HEAD
   <ItemGroup>
     <ProjectReference Include="../Tacomanda.Domain/Tacomanda.Domain.csproj" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
   </ItemGroup>
+=======
+  <ItemGroup><ProjectReference Include="../Tacomanda.Domain/Tacomanda.Domain.csproj" /></ItemGroup>
+>>>>>>> 4c695f795a46a9ec3b62cb63a997060b28afe20a
 </Project>

@@ -2,6 +2,10 @@
   <ItemGroup>
     <ProjectReference Include="../Tacomanda.Application/Tacomanda.Application.csproj" />
     <ProjectReference Include="../Tacomanda.Infrastructure/Tacomanda.Infrastructure.csproj" />
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.14" />
+=======
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+>>>>>>> 4c695f795a46a9ec3b62cb63a997060b28afe20a
   </ItemGroup>
 </Project>

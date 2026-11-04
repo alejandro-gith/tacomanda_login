@@ -1,5 +1,6 @@
 **/bin/
 **/obj/
+<<<<<<< HEAD
 **/node_modules/
 **/dist/
 **/.angular/
@@ -10,3 +11,13 @@
 *.db-wal
 .env
 backend/src/Tacomanda.Api/appsettings.Development.json
+=======
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+.vs/
+.vscode/
+*.user
+*.suo
+.DS_Store
+>>>>>>> 4c695f795a46a9ec3b62cb63a997060b28afe20a
