@@ -1,0 +1,50 @@
+<main class="admin">
+  <header>
+    <div><h1>🌮 Tacos Angy</h1><p>Administración · Platillos y equipo</p></div>
+    <button type="button" class="secondary" (click)="cierre.cerrar()">Cerrar sesión</button>
+  </header>
+
+  @if (vm.error) { <p role="alert" class="alert">{{ vm.error }}</p> }
+  @if (vm.mensaje) { <p role="status" class="success">{{ vm.mensaje }}</p> }
+
+  <div class="grid">
+    <section class="card">
+      <h2>{{ vm.editandoId ? "Editar platillo" : "Nuevo platillo" }}</h2>
+      <form (ngSubmit)="facade.guardarPlatillo()">
+        <label>Nombre<input name="nombre" [(ngModel)]="vm.platillo.nombre" maxlength="100" required></label>
+        <label>Categoría<input name="categoria" [(ngModel)]="vm.platillo.categoria" maxlength="60" required></label>
+        <label>Descripción<textarea name="descripcion" [(ngModel)]="vm.platillo.descripcion" maxlength="500"></textarea></label>
+        <label>Precio<input name="precio" type="number" min="0.01" step="0.01" [(ngModel)]="vm.platillo.precio" required></label>
+        @if (!vm.precioValido) { <small class="field-error">El precio debe ser mayor que cero.</small> }
+        <label>Emoji<input name="emoji" [(ngModel)]="vm.platillo.emoji" maxlength="16"></label>
+        <button type="submit" [disabled]="vm.loading || !vm.precioValido">{{ vm.editandoId ? "Guardar cambios" : "Crear platillo" }}</button>
+        @if (vm.editandoId) { <button type="button" class="secondary" (click)="vm.limpiarPlatillo()">Cancelar</button> }
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Dar de alta empleado</h2>
+      <form (ngSubmit)="facade.altaEmpleado()">
+        <label>Usuario<input name="usuario" [(ngModel)]="vm.empleado.usuario" pattern="[a-zA-Z0-9._-]+" maxlength="80" required autocomplete="off"></label>
+        <label>Nombre<input name="nombreEmpleado" [(ngModel)]="vm.empleado.nombre" maxlength="100" required></label>
+        <label>Contraseña<input name="password" type="password" [(ngModel)]="vm.empleado.password" minlength="8" maxlength="128" required autocomplete="new-password"></label>
+        <label>Rol<select name="rol" [(ngModel)]="vm.empleado.rol"><option value="Mesero">Mesero</option><option value="Cajero">Cajero</option></select></label>
+        <button type="submit" [disabled]="vm.loading">Registrar empleado</button>
+      </form>
+    </section>
+  </div>
+
+  <section class="card catalogo">
+    <h2>Platillos activos</h2>
+    @if (vm.loading) { <p>Cargando…</p> }
+    @for (platillo of vm.platillos; track platillo.id) {
+      <article>
+        <span>{{ platillo.emoji }} {{ platillo.nombre }} · {{ platillo.categoria }} · {{ platillo.precio | currency:'MXN' }}</span>
+        <div>
+          <button type="button" class="secondary" [disabled]="vm.loading" (click)="vm.editar(platillo)">Editar</button>
+          <button type="button" class="danger" [disabled]="vm.loading" (click)="facade.eliminarPlatillo(platillo.id)">Desactivar</button>
+        </div>
+      </article>
+    } @empty { <p>No hay platillos activos.</p> }
+  </section>
+</main>

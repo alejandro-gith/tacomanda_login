@@ -1,0 +1,70 @@
+<div class="waiter-shell">
+  <header class="waiter-top">
+    <span class="waiter-brand">🌮 Tacos Angy</span>
+    <div><strong>{{ sesion.sesion()?.nombre }}</strong><small>Mesero</small></div>
+    <button class="cart-pill">{{ vm.cantidadTotal }} productos · {{ vm.total | currency:"MXN":"symbol-narrow" }}</button>
+    <button class="btn" (click)="cierre.cerrar()">Cambiar turno</button>
+  </header>
+  <main class="waiter-page">
+    <section class="menu">
+      <div class="menu-head"><div><h1>Nuestro menú</h1><p>Selecciona los productos de la comanda.</p></div></div>
+      <nav class="categories">
+        @for (categoria of vm.categorias; track categoria) {
+          <button [class.active]="vm.categoria === categoria" (click)="vm.seleccionarCategoria(categoria)">{{ categoria }}</button>
+        }
+      </nav>
+      @if (vm.error) { <p class="error" role="alert">{{ vm.error }}</p> }
+      @if (vm.resultado) { <p class="success" role="status">✓ {{ vm.resultado }}</p> }
+      <div class="dish-grid">
+        @for (platillo of vm.visibles; track platillo.id) {
+          <article class="dish-card">
+            <div class="dish-emoji">{{ platillo.emoji }}</div>
+            <div class="dish-info">
+              <span class="cat">{{ platillo.categoria }}</span>
+              <h2>{{ platillo.nombre }}</h2><p>{{ platillo.descripcion }}</p>
+              <strong>{{ platillo.precio | currency:"MXN":"symbol-narrow" }}</strong>
+            </div>
+            @if (vm.cantidad(platillo.id)) { <span class="qty-badge">{{ vm.cantidad(platillo.id) }}</span> }
+            <button [disabled]="vm.loading" (click)="vm.agregar(platillo)" [attr.aria-label]="'Agregar ' + platillo.nombre">+</button>
+          </article>
+        } @empty { <p class="empty">No hay platillos disponibles.</p> }
+      </div>
+    </section>
+    <aside class="order">
+      <header><div><span>Comanda nueva</span><h2>Detalle del pedido</h2></div><b>{{ vm.cantidadTotal }}</b></header>
+      <div class="field">
+        <label for="mesa">Mesa</label>
+        <select id="mesa" [value]="vm.mesaId" [disabled]="vm.loading"
+          (change)="vm.seleccionarMesa($any($event.target).value)">
+          <option value="" disabled>Selecciona una mesa</option>
+          @for (mesa of vm.mesas; track mesa.id) {
+            <option [value]="mesa.id" [disabled]="!mesa.disponible">{{ mesa.nombre }} · {{ mesa.disponible ? "Disponible" : "Ocupada" }}</option>
+          }
+        </select>
+      </div>
+      <div class="cart-items">
+        @for (linea of vm.carrito; track linea.platillo.id) {
+          <article class="cart-item">
+            <div><strong>{{ linea.platillo.nombre }}</strong><span>{{ linea.platillo.precio | currency:"MXN":"symbol-narrow" }} c/u</span></div>
+            <div class="qty">
+              <button [disabled]="vm.loading" (click)="vm.cambiarCantidad(linea.platillo.id, -1)">−</button>
+              <b>{{ linea.cantidad }}</b>
+              <button [disabled]="vm.loading || linea.cantidad >= 99" (click)="vm.cambiarCantidad(linea.platillo.id, 1)">+</button>
+            </div>
+            <input placeholder="Observaciones (opcional)" maxlength="200" [disabled]="vm.loading"
+              [value]="linea.observaciones"
+              (input)="vm.cambiarObservaciones(linea.platillo.id, $any($event.target).value)" />
+            <span class="subtotal">{{ linea.cantidad * linea.platillo.precio | currency:"MXN":"symbol-narrow" }}</span>
+          </article>
+        } @empty { <p class="empty">Agrega productos desde el menú.</p> }
+      </div>
+      <footer>
+        <div><span>Total</span><strong>{{ vm.total | currency:"MXN":"symbol-narrow" }}</strong></div>
+        <button class="send" [disabled]="vm.loading || !vm.mesaId || !vm.carrito.length" (click)="facade.enviar()">
+          {{ vm.loading ? "CARGANDO…" : "ENVIAR A COCINA" }}
+        </button>
+        <button class="clear" [disabled]="vm.loading" (click)="vm.limpiar()">Limpiar comanda</button>
+      </footer>
+    </aside>
+  </main>
+</div>

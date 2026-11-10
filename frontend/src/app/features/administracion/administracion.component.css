@@ -1,0 +1,17 @@
+.admin { max-width: 1100px; margin: auto; padding: 28px; color: #25201c; }
+header, article { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+header { margin-bottom: 24px; }
+header h1 { margin: 0; }
+header p { margin: 4px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+.card { background: white; border: 1px solid #e7dfd5; border-radius: 14px; padding: 22px; margin-bottom: 20px; box-shadow: 0 4px 16px #2816000d; }
+label { display: block; margin: 12px 0; font-weight: 600; }
+input, textarea, select { display: block; width: 100%; box-sizing: border-box; padding: 10px; margin-top: 5px; border: 1px solid #cabfb4; border-radius: 8px; font: inherit; }
+button { border: 0; border-radius: 8px; background: #a93d1e; color: white; padding: 10px 14px; cursor: pointer; margin: 4px; }
+button:disabled { opacity: .55; cursor: wait; }
+button.secondary { background: #ece5dc; color: #3c2c23; }
+button.danger { background: #8b2929; }
+article { border-top: 1px solid #e7dfd5; padding: 12px 0; flex-wrap: wrap; }
+.alert, .success { padding: 12px; border-radius: 8px; }
+.alert { background: #ffe8e8; } .success { background: #e8f5e9; }
+.field-error { display: block; margin-top: -7px; color: #8b2929; }
