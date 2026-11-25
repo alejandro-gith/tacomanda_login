@@ -1,0 +1,29 @@
+.board { max-width: 1100px; min-height: 100vh; margin: auto; padding: 32px 24px; color: #2e2118; }
+.board-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+.board-header h1 { margin: 0; color: #6d2d13; font-size: clamp(1.75rem, 3vw, 2.4rem); }
+.board-header p { margin: 6px 0 0; color: #70574a; }
+.board-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.board-actions a, .board-actions button, .ticket-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 42px; padding: 10px 15px; border-radius: 9px; font-weight: 700;
+}
+.board-actions a, .ticket-link { background: #fff; border: 1px solid #d9c9bb; color: #78370f; text-decoration: none; }
+.board-actions a:hover, .ticket-link:hover { background: #f7e8db; border-color: #aa5b2a; }
+.board-actions button { margin: 0; }
+button.secondary { background: #fff; border-color: #d9c9bb; color: #683b24; }
+.card, .dialog { background: #fff; border: 1px solid #e2d3c5; border-radius: 14px; padding: 22px; margin: 16px 0; box-shadow: 0 5px 18px rgba(62, 35, 20, .08); }
+.card h2 { margin: 0 0 8px; color: #462616; }
+.card p { color: #634a3b; }
+.card strong { display: block; margin: 14px 0; color: #55311d; }
+.card button, .ticket-link { margin: 8px 8px 0 0; }
+.notice, .empty-state { padding: 22px; border-radius: 12px; background: #fff; border: 1px solid #e2d3c5; color: #5d4739; }
+.error-notice { background: #fff1ed; border-color: #e8aa96; color: #8a251c; }
+.empty-state { text-align: center; padding: 48px 22px; }
+.overlay { position: fixed; z-index: 30; inset: 0; background: rgba(20, 14, 10, .65); display: grid; place-items: center; padding: 16px; }
+.dialog { color: #2e2118; width: min(95vw, 650px); max-height: 85vh; overflow: auto; margin: 0; }
+.dialog input, .dialog select { margin: 6px; max-width: 100%; padding: 9px; color: #2e2118; background: #fff; border: 1px solid #cdb9a9; border-radius: 8px; }
+@media (max-width: 700px) {
+  .board { padding: 22px 16px; }
+  .board-actions { width: 100%; }
+  .board-actions a, .board-actions button { flex: 1 1 auto; }
+}

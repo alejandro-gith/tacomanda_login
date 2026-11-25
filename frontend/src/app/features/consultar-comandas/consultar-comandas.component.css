@@ -1,0 +1,7 @@
+.board { max-width: 980px; margin: auto; padding: 24px; color: #33261c; }
+header { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.card, .dialog { background: white; border: 1px solid #e3d5c8; border-radius: 12px; padding: 20px; margin: 16px 0; }
+.card h2 { margin-top: 0; } button, a { margin: 6px; padding: 9px 14px; }
+.overlay { position: fixed; inset: 0; background: #0008; display: grid; place-items: center; padding: 16px; }
+.dialog { width: min(95vw, 650px); max-height: 85vh; overflow: auto; }
+.dialog input, .dialog select { margin: 6px; max-width: 100%; padding: 7px; }

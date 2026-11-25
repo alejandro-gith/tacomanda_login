@@ -1,0 +1,38 @@
+<main class="board">
+  <header class="board-header">
+    <div><h1>💳 Caja · Tacos Angy</h1><p>Comandas y cobros del turno</p></div>
+    <nav class="board-actions" aria-label="Acciones de caja">
+      <a routerLink="/cierre-caja">Cierre de caja</a>
+      <a routerLink="/retroalimentacion">Opinión</a>
+      <button type="button" class="secondary" [disabled]="vm.loading()" (click)="facade.consultar()">Actualizar</button>
+      <button type="button" (click)="cierre.cerrar()">Cerrar sesión</button>
+    </nav>
+  </header>
+  @if (vm.error()) { <p class="notice error-notice" role="alert">{{ vm.error() }}</p> }
+  @if (vm.loading()) { <p class="notice" role="status">Cargando comandas…</p> }
+  @for (comanda of vm.comandas(); track comanda.id) {
+    <article class="card">
+      <h2>Comanda #{{ comanda.numeroDiario }} · {{ comanda.estado }}</h2>
+      <small>{{ comanda.fechaOperativa }} · ID interno {{ comanda.id }}</small>
+      <p>Mesa {{ comanda.mesaId }} · {{ comanda.fechaCreacion | date:'short' }}</p>
+      @for (detalle of comanda.detalles; track detalle.platilloId) {
+        <p>{{ detalle.cantidad }} × {{ detalle.nombre }} · {{ detalle.subtotal | currency:'MXN' }}</p>
+      }
+      <strong>Consumo {{ comanda.total | currency:'MXN' }}</strong>
+      @if (comanda.estado === 'Cobrada') {
+        <p>Propina {{ comanda.propina | currency:'MXN' }} · Total cobrado {{ comanda.totalConPropina | currency:'MXN' }}</p>
+      }
+      @if (comanda.estado === 'Lista') {
+        <button type="button" (click)="vm.seleccionada.set(comanda)">Cobrar</button>
+      }
+      @if (comanda.estado === 'Cobrada') {
+        <a class="ticket-link" [routerLink]="['/ticket', comanda.id]">Ver e imprimir ticket</a>
+      }
+    </article>
+  } @empty { @if (!vm.loading() && !vm.error()) { <p class="empty-state">No hay comandas registradas.</p> } }
+  @if (vm.seleccionada(); as elegida) {
+    <div class="overlay"><div class="dialog"><button type="button" class="secondary" (click)="vm.seleccionada.set(null)">Cerrar</button>
+      <app-cobrar-comanda-mesero [comanda]="elegida" (cobrada)="vm.actualizar($event)" />
+    </div></div>
+  }
+</main>

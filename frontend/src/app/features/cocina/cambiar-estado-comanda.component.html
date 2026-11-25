@@ -1,0 +1,35 @@
+<main class="cocina">
+  <header><div><h1>👨‍🍳 Cocina · Tacos Angy</h1><p>Pedidos por preparar y entregar</p></div>
+    <nav class="acciones" aria-label="Acciones de cocina">
+      <a routerLink="/retroalimentacion">Opinión</a>
+      <button type="button" class="secondary" (click)="facade.consultar()" [disabled]="vm.loading()">Actualizar</button>
+      <button type="button" (click)="cierre.cerrar()">Cerrar sesión</button>
+    </nav></header>
+  @if (vm.error()) { <p class="error-aviso" role="alert">{{ vm.error() }}</p> }
+  @if (vm.loading()) { <p class="cargando" role="status">Actualizando…</p> }
+  <div class="columnas">
+    @for (estado of ['Pendiente', 'EnPreparacion', 'Lista']; track estado) {
+      <section><h2>{{ estado === 'EnPreparacion' ? 'En preparación' : estado }}</h2>
+        @for (c of vm.comandas(); track c.id) {
+          @if (c.estado === estado) {
+            <article><div class="cabecera"><strong>Comanda #{{ c.numeroDiario }}</strong>
+              <time>{{ c.fechaCreacion | date:'shortTime' }}</time></div>
+              <small>{{ c.fechaOperativa }} · Mesa {{ c.mesaId }}</small>
+              @for (d of c.detalles; track d.platilloId) {
+                <p>{{ d.cantidad }} × {{ d.nombre }}
+                  @if (d.observaciones) { <small> · {{ d.observaciones }}</small> }</p>
+              }
+              <strong>{{ c.total | currency:'MXN' }}</strong>
+              @if (estado === 'Pendiente') {
+                <button type="button" [disabled]="vm.loading()" (click)="facade.cambiar(c.id, 'EnPreparacion')">Iniciar preparación</button>
+              }
+              @if (estado === 'EnPreparacion') {
+                <button type="button" [disabled]="vm.loading()" (click)="facade.cambiar(c.id, 'Lista')">Marcar lista</button>
+              }
+            </article>
+          }
+        }
+      </section>
+    }
+  </div>
+</main>

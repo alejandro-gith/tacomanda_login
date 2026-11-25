@@ -1,0 +1,16 @@
+.ticket-page { max-width: 580px; margin: 24px auto; color: #33261c; padding: 12px; }
+nav { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+nav a, button { padding: 10px 14px; }
+.ticket { background: #fff; padding: 26px; border: 1px solid #ddd; border-radius: 8px; }
+.ticket h1, .ticket > p:first-of-type, .gracias { text-align: center; }
+.linea { display: flex; justify-content: space-between; gap: 12px; }
+.linea > * { overflow-wrap: anywhere; }
+@media print {
+  @page { margin: 0; }
+  nav, .aviso-papel { display: none; }
+  .ticket-page { margin: 0; width: 58mm; max-width: 58mm; padding: 0; color: #000; }
+  .ticket-page.paper-80 { width: 80mm; max-width: 80mm; }
+  .ticket { border: 0; border-radius: 0; padding: 2mm; font-size: 10px; }
+  .linea { gap: 2mm; }
+  .linea > :last-child { flex-shrink: 0; }
+}

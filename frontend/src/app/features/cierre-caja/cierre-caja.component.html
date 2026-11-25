@@ -1,0 +1,23 @@
+<main class="form-page">
+  <nav><a [routerLink]="facade.destino()">Volver</a></nav>
+  <section class="card"><h1>🧾 Cierre de caja</h1>
+    <p>Efectivo desde el último cierre (consumo y propinas en efectivo):
+      <b>{{ vm.totalSistema() | currency:'MXN' }}</b></p>
+    <p>El total se calcula con los cobros registrados. Cuenta el efectivo físicamente antes de confirmar.</p>
+    <label>Efectivo contado
+      <input type="number" min="0" step="0.01" [value]="vm.totalContado()"
+        (input)="vm.totalContado.set(+$any($event.target).value)"></label>
+    <label><input type="checkbox" [checked]="vm.huboIncidencias()"
+      (change)="vm.huboIncidencias.set($any($event.target).checked)"> Hubo incidencias</label>
+    <label>Comentarios
+      <textarea maxlength="2000" [value]="vm.comentarios()"
+        (input)="vm.comentarios.set($any($event.target).value)"></textarea></label>
+    @if (vm.error()) { <p role="alert">{{ vm.error() }}</p> }
+    <button [disabled]="vm.loading() || vm.totalSistema() === null || vm.totalContado() < 0"
+      (click)="facade.registrar()">Registrar cierre</button>
+    @if (vm.cierre(); as cierre) {
+      <p role="status">Cierre {{ cierre.id }} registrado el {{ cierre.fechaHora | date:'short' }}.
+        Diferencia: {{ cierre.diferencia | currency:'MXN' }}</p>
+    }
+  </section>
+</main>

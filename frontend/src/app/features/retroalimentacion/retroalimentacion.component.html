@@ -1,0 +1,14 @@
+<main class="form-page"><a [routerLink]="facade.destino()">Volver</a>
+  <section class="card"><h1>⭐ Tu opinión sobre TacoManda</h1>
+    <label>Calificación (1 a 5)
+      <select [value]="vm.calificacion()" (change)="vm.calificacion.set(+$any($event.target).value)">
+        @for (estrella of [1, 2, 3, 4, 5]; track estrella) { <option [value]="estrella">{{ estrella }} estrellas</option> }
+      </select></label>
+    <label>Comentario
+      <textarea maxlength="2000" [value]="vm.comentario()"
+        (input)="vm.comentario.set($any($event.target).value)"></textarea></label>
+    @if (vm.error()) { <p role="alert">{{ vm.error() }}</p> }
+    @if (vm.mensaje()) { <p role="status">{{ vm.mensaje() }}</p> }
+    <button [disabled]="vm.loading()" (click)="facade.enviar()">Enviar opinión</button>
+  </section>
+</main>

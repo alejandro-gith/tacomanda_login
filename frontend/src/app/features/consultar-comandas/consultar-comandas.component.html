@@ -1,0 +1,46 @@
+<main class="board">
+  <header><h1>Mis comandas</h1><a routerLink="/comandas/crear">Nueva comanda</a>
+    <a routerLink="/retroalimentacion">Opinión</a><button (click)="cierre.cerrar()">Salir</button></header>
+  <label>Estado <select [value]="vm.estado()" (change)="vm.estado.set($any($event.target).value); facade.consultar()">
+    <option value="">Todos</option><option value="Pendiente">Pendiente</option>
+    <option value="EnPreparacion">En preparación</option><option value="Lista">Lista</option>
+    <option value="Cobrada">Cobrada</option></select></label>
+  <button [disabled]="vm.loading()" (click)="facade.consultar()">Actualizar</button>
+  @if (vm.error()) { <p role="alert">{{ vm.error() }}</p> }
+  @if (vm.loading()) { <p>Cargando comandas…</p> }
+  @for (comanda of vm.comandas(); track comanda.id) {
+    <article class="card">
+      <h2>Comanda #{{ comanda.numeroDiario }} · {{ comanda.estado }}</h2>
+      <small>{{ comanda.fechaOperativa }} · ID interno {{ comanda.id }}</small>
+      <p>Mesa {{ comanda.mesaId }} · {{ comanda.fechaCreacion | date:'short' }}</p>
+      @for (detalle of comanda.detalles; track detalle.platilloId) {
+        <p>{{ detalle.cantidad }} × {{ detalle.nombre }} · {{ detalle.subtotal | currency:'MXN' }}
+          @if (detalle.observaciones) { <small>— {{ detalle.observaciones }}</small> }</p>
+      }
+      <strong>Total {{ comanda.total | currency:'MXN' }}</strong>
+      @if (comanda.estado === 'Cobrada') {
+        <p>Propina {{ comanda.propina | currency:'MXN' }} · Total cobrado {{ comanda.totalConPropina | currency:'MXN' }}</p>
+      }
+      @if (comanda.estado === 'Pendiente') {
+        <button (click)="vm.seleccionada.set(comanda)">Editar</button>
+      }
+      @if (comanda.estado === 'Lista') {
+        <button (click)="vm.seleccionada.set(comanda)">Cobrar</button>
+      }
+      @if (comanda.estado === 'Cobrada') {
+        <p>Cobrada · {{ comanda.formaPago }}</p>
+        <a [routerLink]="['/ticket', comanda.id]">Ver e imprimir ticket</a>
+      }
+    </article>
+  } @empty { @if (!vm.loading()) { <p>Sin comandas para este filtro.</p> } }
+  @if (vm.seleccionada(); as elegida) {
+    <div class="overlay"><div class="dialog"><button (click)="vm.seleccionada.set(null)">Cerrar</button>
+      @if (elegida.estado === 'Pendiente') {
+        <app-editar-comanda [comanda]="elegida" (actualizada)="vm.actualizar($event); vm.seleccionada.set(null)" />
+      }
+      @if (elegida.estado === 'Lista') {
+        <app-cobrar-comanda-mesero [comanda]="elegida" (cobrada)="vm.actualizar($event); vm.seleccionada.set(null)" />
+      }
+    </div></div>
+  }
+</main>
