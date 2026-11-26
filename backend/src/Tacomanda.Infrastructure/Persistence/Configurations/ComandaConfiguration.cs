@@ -13,7 +13,12 @@ public sealed class ComandaConfiguration : IEntityTypeConfiguration<Comanda>
         builder.ToTable("comandas");
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Id).HasColumnName("id_comanda").ValueGeneratedOnAdd();
-        builder.Property(c => c.FechaOperativa).HasColumnName("fecha_operativa").HasColumnType("date");
+        builder.Property(c => c.FechaOperativa)
+            .HasColumnName("fecha_operativa")
+            .HasColumnType("date")
+            .HasConversion(
+                fecha => fecha.ToDateTime(TimeOnly.MinValue),
+                fecha => DateOnly.FromDateTime(fecha));
         builder.Property(c => c.NumeroDiario).HasColumnName("numero_diario");
         builder.HasIndex(c => new { c.FechaOperativa, c.NumeroDiario }).IsUnique();
         builder.Property(c => c.MesaId).HasColumnName("mesa_id");
